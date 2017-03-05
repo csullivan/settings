@@ -81,6 +81,8 @@ def installPyPackage(tarball):
 dot_emacs_path = '~' if system=='Linux' else path('~','AppData','Roaming')
 emacs_dir = path(dot_emacs_path,'.emacs.d')
 dot_emacs = path(dot_emacs_path,'.emacs')
+i3_dir = path('~','.i3')
+
 
 if system=='Linux':
     link('dot_bash_common','~/.bash_common')
@@ -93,8 +95,8 @@ if system=='Linux':
     link_all_ipython()
 
 link('pylib','~/pylib')
-link('dot_emacs',dot_emacs)
 link('dot_emacs.d',emacs_dir)
+link('dot_i3',i3_dir)
 
 # Not needed so much now that the lab has pip installed.
 # for tarball in sorted(glob(path('pypackages','*.tar.gz'))+

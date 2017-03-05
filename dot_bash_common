@@ -42,12 +42,15 @@ eval $(dircolors ~/.dir_colors)
 alias ec="emacsclient -a '' -c"
 alias en="emacsclient -a '' -n"
 export EDITOR="emacsclient -a '' -c -nw"
+alias emacs="ec"
+
 
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
+alias lh='ls -ltrh'
 alias lll='ll -a'
 alias duh='du -d 1 -h --exclude "./.snapshot"'
 

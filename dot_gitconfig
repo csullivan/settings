@@ -1,6 +1,6 @@
 [user]
-	name = Eldritch Cheese
-	email = eldritch.cheese@gmail.com
+	name = Chris Sullivan
+	email = sullivan@nscl.msu.edu
 [core]
 	editor = emacs -nw
 [push]

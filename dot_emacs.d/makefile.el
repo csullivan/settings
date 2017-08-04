@@ -56,4 +56,4 @@
 
 (add-hook 'c-initialization-hook '(lambda ()
    (define-key c-mode-base-map (kbd "C-c c") 'find-makefile-compile)
-   (define-key c-mode-base-map (kbd "C-c C-c") 'find-makefile-compile-fast)))"\""))"")))))\\)\\)\\)")))))\\)"))))
+   (define-key c-mode-base-map (kbd "C-c C-c") 'find-makefile-compile-fast)))

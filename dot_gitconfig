@@ -1,9 +1,11 @@
 [user]
-	name = Chris Sullivan
-	email = sullivan@nscl.msu.edu
+        name = Chris Sullivan
+        email = chris.sullivan@intel.com
 [core]
-	editor = emacs -nw
+        editor = emacsclient -nw
 [push]
-	default = simple
+        default = simple
 [merge]
-	tool = meld
+        tool = meld
+[alias]
+        lgb = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches

@@ -6,6 +6,20 @@
 (setq gc-cons-threshold 100000000)
 (setq inhibit-startup-message t)
 
+;; (require 'rtags)
+;; (require 'company-rtags)
+;; (setq rtags-completions-enabled t)
+;; (eval-after-load 'company
+;;   '(add-to-list
+;;     'company-backends 'company-rtags))
+;; (setq rtags-autostart-diagnostics t)
+;; (rtags-enable-standard-keybindings)
+
+;; (require 'helm-rtags)
+;; (setq rtags-use-helm t)
+;; (setq rtags-display-result-backend 'helm)
+
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Automatically install packages and dependencies ---------------------------------------
@@ -52,8 +66,7 @@
 (add-to-list 'load-path "~/.emacs.d/custom")
 
 (require 'setup-helm)
-(require 'setup-helm-gtags)
-;; (require 'setup-ggtags) ; using helm instead of ggtags
+;; (require 'setup-helm-rtags)
 (require 'setup-cedet)
 (require 'setup-editing)
 
@@ -127,9 +140,6 @@
 (require 'clean-aindent-mode)
 (add-hook 'prog-mode-hook 'clean-aindent-mode)
 
-;; Package: dtrt-indent
-(require 'dtrt-indent)
-(dtrt-indent-mode 1)
 
 ;; Package: ws-butler
 (require 'ws-butler)
@@ -143,15 +153,6 @@
 (require 'yasnippet)
 (yas-global-mode 1)
 
-;; Package: smartparens
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
 
 ;; Package: projejctile
 (require 'projectile)
@@ -169,38 +170,9 @@
 
 (setq magic-mode-alist nil)
 
-;; Display, coloring, fontsize -----------------------------------------------------------
-
-; Font size 10 on my laptop, 12 everywhere else.
-
-(set-face-attribute 'default nil :height 120)
-(set-face-attribute 'default nil :height
-            (if (and (display-graphic-p)
-                 (or (= (x-display-pixel-height) 1050)
-                 (= (x-display-pixel-height) 1080)))
-            100 80))
-
-(setq rst-level-face-base-light 30) ;RST section header is abysmal otherwise
-
-                                        ; Coloring things assuming that I have 256 colors.
-(if (or (string= (getenv "TERM") "xterm-256color")
-        (string= system-type "windows-nt"))
-    (progn
-      (add-to-list 'load-path "~/.emacs.d/color-theme-6.6.0")
-      (require 'color-theme)
-      (color-theme-initialize)
-                                        ;(color-theme-euphoria)
-      (set-face-foreground 'font-lock-preprocessor-face "light gray")
-      (set-face-foreground 'font-lock-constant-face "light gray")
-      (require 'hl-line)
-      (global-hl-line-mode t)
-      ;(set-face-background hl-line-face "gray10")
-      )
-                                        ; Color options if I only have 8 colors.
-  (progn
-  (set-face-foreground 'font-lock-comment-face "red")))
 
 
+;; ------------------- validated up to here
 
 ;; General C++ Customizations ------------------------------------------------------------
 
@@ -403,56 +375,13 @@
 (global-set-key "\C-ca" 'align)
 
 
-
-;; emacs auto-gen custom-vars ------------------------------------------------------------
-
-
-;; themeing when in X mode and not when in terminal mode
-;(when (display-graphic-p)
-(load-theme 'tangotango t)
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(flymake-google-cpplint-command "/usr/local/bin/cpplint")
- '(inhibit-startup-screen t)
- '(truncate-lines nil))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
- '(custom-comment ((((class grayscale color) (background dark)) (:background "red"))))
- '(flymake-errline ((((class color) (background dark)) (:background "white" :foreground "black"))))
- '(font-lock-builtin-face ((t (:foreground "#729fcf"))))
- '(font-lock-comment-face ((t (:foreground "red"))))
- '(font-lock-keyword-face ((t (:foreground "#33cccc" :weight bold))))
- '(font-lock-string-face ((t (:foreground "#111111" :background "lime green" :slant italic))))
- '(linum ((((background dark)) :foreground "cyan") (t :foreground "gray")))
- '(semantic-tag-boundary-face ((((class color) (background dark)) nil)))
- '(semantic-unmatched-syntax-face ((((class color) (background dark)) nil)))
- '(semantic-unmatched-syntax-face ((((class color) (background dark)) nil)))
-)
-
-
 ;; enable forward delete with delete key in x11 mode
-(normal-erase-is-backspace-mode 1)
+;; (normal-erase-is-backspace-mode 1)
 ;; disable yas-minor mode in terminal environment in x11
 (add-hook 'term-mode-hook (lambda()
-                (yas-minor-mode -1)
-        (yas-global-mode -1)
-        ))
-;) ;;end theming
-
-(setq term-default-bg-color (face-background 'default))
-(setq term-default-fg-color "#eeeeec")
-
-
-
-
+			    (yas-minor-mode -1)
+			    (yas-global-mode -1)
+			    ))
 ;; terminal mouse input + scroll ---------------------------------------------------------
 
 (unless window-system
@@ -487,52 +416,38 @@
 
 (global-set-key (kbd "C-x ;") 'comment-or-uncomment-region) ;Preferred over comment-dwim
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("5d9351cd410bff7119978f8e69e4315fd1339aa7b3af6d398c5ca6fac7fd53c7" default)))
- '(flymake-google-cpplint-command "/usr/local/bin/cpplint")
- '(inhibit-startup-screen t)
- '(truncate-lines nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-; '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
- '(custom-comment ((((class grayscale color) (background dark)) (:background "red"))))
- '(flymake-errline ((((class color) (background dark)) (:background "white" :foreground "black"))))
- '(font-lock-builtin-face ((t (:foreground "#729fcf"))))
- '(font-lock-comment-face ((t (:foreground "red"))))
- '(font-lock-function-name-face ((t (:foreground "purple"))))
- '(font-lock-keyword-face ((t (:foreground "#33cccc" :weight bold))))
- '(font-lock-string-face ((t (:foreground "#111111" :background "lime green" :slant italic))))
- '(linum ((((background dark)) :foreground "cyan") (t :foreground "gray")))
- '(semantic-tag-boundary-face ((((class color) (background dark)) nil)))
- '(semantic-unmatched-syntax-face ((((class color) (background dark)) nil))))
-
-
 (load-file "~/.emacs.d/hide-comnt.el")
 
 (add-hook 'c-mode-common-hook
-      (lambda()
-        (local-set-key (kbd "C-c <right>") 'hs-show-block)
-        (local-set-key (kbd "C-c <left>")  'hs-hide-block)
-        (local-set-key (kbd "C-c <up>")    'hs-hide-all)
-        (local-set-key (kbd "C-c <down>")  'hs-show-all)
-        (hs-minor-mode t)))
+	  (lambda()
+	    (local-set-key (kbd "C-c <right>") 'hs-show-block)
+	    (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+	    (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+	    (local-set-key (kbd "C-c <down>")  'hs-show-all)
+	    (hs-minor-mode t)))
 (add-hook 'cc-mode-common-hook
-      (lambda()
-        (local-set-key (kbd "C-c <right>") 'hs-show-block)
-        (local-set-key (kbd "C-c <left>")  'hs-hide-block)
-        (local-set-key (kbd "C-c <up>")    'hs-hide-all)
-        (local-set-key (kbd "C-c <down>")  'hs-show-all)
-        (hs-minor-mode t)))
+	  (lambda()
+	    (local-set-key (kbd "C-c <right>") 'hs-show-block)
+	    (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+	    (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+	    (local-set-key (kbd "C-c <down>")  'hs-show-all)
+	    (hs-minor-mode t)))
 (put 'downcase-region 'disabled nil)
 
-; for compiling a makefile project source in emacs
+					; for compiling a makefile project source in emacs
 (load-file "~/.emacs.d/makefile.el")
+
+(load-theme 'tangotango t)
+
+;; PACKAGE: dtrt-indent
+(use-package dtrt-indent
+  :init
+  (dtrt-indent-global-mode 1)
+  (setq dtrt-indent-verbosity 0))
+(custom-set-variables '(dtrt-indent-min-quality 70.0))
+
+;; set up backspace via C-h in all contexts
+(global-set-key "\C-h" 'delete-backward-char)
+(define-key helm-map (kbd "C-h") 'helm-ff-delete-char-backward)
+(define-key helm-find-files-map (kbd "C-h") 'helm-ff-delete-char-backward)
+(put 'upcase-region 'disabled nil)

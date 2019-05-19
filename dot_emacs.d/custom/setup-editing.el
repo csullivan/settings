@@ -49,11 +49,6 @@
 (add-hook 'prog-mode-hook 'clean-aindent-mode)
 
 
-;; PACKAGE: dtrt-indent
-(require 'dtrt-indent)
-(dtrt-indent-mode 1)
-(setq dtrt-indent-verbosity 0)
-
 ;; PACKAGE: ws-butler
 (require 'ws-butler)
 (add-hook 'c-mode-common-hook 'ws-butler-mode)
@@ -296,3 +291,8 @@ Position the cursor at it's beginning, according to the current mode."
 (global-set-key (kbd "M-o") 'open-line)
 
 (provide 'setup-editing)
+
+;; ;; PACKAGE: dtrt-indent
+;; (require 'dtrt-indent)
+;; (dtrt-indent-mode 1)
+;; (setq dtrt-indent-verbosity 0)

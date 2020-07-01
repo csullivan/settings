@@ -43,7 +43,6 @@
     smartparens
     projectile
     volatile-highlights
-    undo-tree
     zygospore))
 
 (defun install-packages ()

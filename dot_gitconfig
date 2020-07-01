@@ -1,6 +1,6 @@
 [user]
         name = Chris Sullivan
-        email = chris.sullivan@intel.com
+        email = csullivan@octoml.ai
 [core]
         editor = emacsclient -nw
 [push]

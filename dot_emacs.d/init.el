@@ -438,6 +438,17 @@
 
 (load-theme 'tangotango t)
 
+;; set up backspace via C-h in all contexts
+(global-set-key "\C-h" 'delete-backward-char)
+(define-key helm-map (kbd "C-h") 'helm-ff-delete-char-backward)
+(define-key helm-find-files-map (kbd "C-h") 'helm-ff-delete-char-backward)
+(put 'upcase-region 'disabled nil)
+
+;; add mode for nvidia ptx
+(load-file "~/.emacs.d/custom/ptx-mode.el")
+(require 'ptx-mode)
+(add-to-list 'auto-mode-alist '("\\.ptx\\'" . ptx-mode))
+
 ;; PACKAGE: dtrt-indent
 (use-package dtrt-indent
   :init
@@ -445,8 +456,3 @@
   (setq dtrt-indent-verbosity 0))
 (custom-set-variables '(dtrt-indent-min-quality 70.0))
 
-;; set up backspace via C-h in all contexts
-(global-set-key "\C-h" 'delete-backward-char)
-(define-key helm-map (kbd "C-h") 'helm-ff-delete-char-backward)
-(define-key helm-find-files-map (kbd "C-h") 'helm-ff-delete-char-backward)
-(put 'upcase-region 'disabled nil)

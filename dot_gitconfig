@@ -1,14 +1,12 @@
 [user]
-	name = Eldritch Cheese
-	email = eldritch.cheese@gmail.com
+        name = Chris Sullivan
+        email = csullivan@octoml.ai
 [core]
-	editor = emacs -nw
+        editor = emacsclient -nw
+	excludesFile = ~/.gitignore
 [push]
-	default = simple
-
-# Include at the end so it overrides any other settings.
-# Currently used for work name/email on work account.
-[include]
-        path = ~/.gitconfig_local
-[submodule]
-	recurse = true
+        default = simple
+[merge]
+        tool = meld
+[alias]
+        lgb = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches

@@ -127,3 +127,5 @@ if which loginctl > /dev/null && loginctl >& /dev/null; then
         echo "Tell the sysadmin to set KillUserProcesses=no in /etc/systemd/login.conf"
     fi
 fi
+
+alias lh='ls -ltrh'

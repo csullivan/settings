@@ -1061,3 +1061,39 @@
 (define-key helm-map (kbd "C-h") 'helm-ff-delete-char-backward)
 (define-key helm-find-files-map (kbd "C-h") 'helm-ff-delete-char-backward)
 (put 'upcase-region 'disabled nil)
+
+
+; Toggle line truncation
+(global-set-key (kbd "C-x l")
+                (lambda () (interactive) (toggle-truncate-lines)))
+
+;; Allows for calculations within emacs --------------------------------------------------
+
+(defun replace-last-sexp ()
+  (interactive)
+  (let ((value (eval (preceding-sexp))))
+    (kill-sexp -1)
+    (insert (format "%s" value))))
+(global-set-key (kbd "C-c c") 'replace-last-sexp)
+
+;; The default comment-dwim assumes transient-mark-mode is on.  The
+;; simpler behavior is closer to what I want.
+(global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
+
+;; Color theming
+
+(use-package color-theme-modern
+    :config
+  (load-theme 'tangotango t t)
+  (enable-theme 'tangotango)
+  (set-face-foreground 'font-lock-preprocessor-face "light sea green")
+  (set-face-foreground 'font-lock-constant-face "light sea green")
+  )
+
+(add-to-list 'default-frame-alist '(background-color . "gray10"))
+
+(use-package hl-line
+    :config
+  (global-hl-line-mode t)
+  (set-face-background hl-line-face "gray9")
+  )

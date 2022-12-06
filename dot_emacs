@@ -87,19 +87,6 @@
 (update-font-size)
 
 
-(use-package color-theme-modern
-  :config
-  (load-theme 'euphoria t t)
-  (enable-theme 'euphoria)
-  (set-face-foreground 'font-lock-preprocessor-face "light sea green")
-  (set-face-foreground 'font-lock-constant-face "light sea green")
-  )
-
-(use-package hl-line
-  :config
-  (global-hl-line-mode t)
-  (set-face-background hl-line-face "gray10")
-  )
 
 
 
@@ -150,10 +137,6 @@
 (setq electric-indent-mode t)
 (global-set-key [remap electric-newline-and-maybe-indent]
                 'newline-and-indent)
-
-;; The default comment-dwim assumes transient-mark-mode is on.  The
-;; simpler behavior is closer to what I want.
-(global-set-key (kbd "M-;") 'comment-or-uncomment-region)
 
 ;;M-<up> and M-<down> to scroll up/down by one line.
 (global-set-key (kbd "<M-up>") (lambda () (interactive) (scroll-down 1)))

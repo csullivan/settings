@@ -2,7 +2,7 @@
         name = Chris Sullivan
         email = csullivan@octoml.ai
 [core]
-        editor = emacsclient -nw
+	editor = emacsclient -c -a emacs
 	excludesFile = ~/.gitignore
 [push]
         default = simple
@@ -10,3 +10,8 @@
         tool = meld
 [alias]
         lgb = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

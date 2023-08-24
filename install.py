@@ -61,7 +61,7 @@ def link_all_ipython():
         link(startup_file, os.path.join(ipython_dir, script_name))
 
 
-git_bin = "git" if system == "Linux" else "c:/Program Files (x86)/Git/bin/git.exe"
+git_bin = "git" if system in ["Linux", "Darwin"] else "c:/Program Files (x86)/Git/bin/git.exe"
 
 
 def clone_git(url, outputDir):
@@ -124,7 +124,9 @@ def download_clangd():
 
 def add_bash_common():
     bashrc_path = os.path.expanduser("~/.bashrc")
-    current_bashrc = open(bashrc_path).read()
+    current_bashrc = ""
+    if os.path.exists(bashrc_path):
+        current_bashrc = open(bashrc_path).read()
     if ".bash_common" in current_bashrc:
         print(".bashrc already calls .bash_common, skipping")
     else:
@@ -138,13 +140,13 @@ def add_bash_common():
             f.write(bashrc)
 
 
-dot_emacs_path = "~" if system == "Linux" else path("~", "AppData", "Roaming")
+dot_emacs_path = "~" if system in ["Linux", "Darwin"] else path("~", "AppData", "Roaming")
 emacs_dir = path(dot_emacs_path, ".emacs.d")
 dot_emacs = path(dot_emacs_path, ".emacs")
 
 git_submodule_update()
 
-if system == "Linux":
+if system in ["Linux", "Darwin"]:
     link("dot_bash_common", "~/.bash_common")
     link("dot_screenrc", "~/.screenrc")
     link("dot_dir_colors", "~/.dir_colors")

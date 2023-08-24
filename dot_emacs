@@ -1,0 +1,70 @@
+;;; Initialize package management
+(require 'package)
+
+(add-to-list
+ 'package-archives
+ '("melpa" . "http://melpa.org/packages/")
+ t)
+
+(package-initialize)
+
+;; Init the list of package.  Only needs to be done once per
+;; installation, but otherwise package-install will complain.
+(unless package-archive-contents
+  (message "Pulling package list from GNU ELPA/MELPA")
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+  (message "Installing use-package")
+  (package-install 'use-package))
+
+(setq use-package-always-ensure t)
+
+;;; Basic keybinds
+;; Configure C-h as backspace
+(global-set-key (kbd "C-h") 'backward-delete-char)
+
+
+;;; Initialize Helm
+(use-package helm
+  :ensure t
+  :config
+  (helm-mode 1)
+  (setq helm-mode-fuzzy-match t)
+  (setq helm-completion-in-region-fuzzy-match t)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x b") 'helm-buffers-list)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+)
+
+;;; Use Rebecca color theme
+(use-package rebecca-theme
+  :ensure t
+  :config
+  (load-theme 'rebecca t))
+
+;;; Multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-c n" . mc/mark-next-like-this)
+         ("C-c p" . mc/mark-previous-like-this))
+  :config
+  ;; Add any additional multiple-cursors configurations here
+  )
+
+
+
+;;;;;;; Auto generated
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(rebecca-theme use-package helm)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

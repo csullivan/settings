@@ -129,6 +129,8 @@ if which loginctl > /dev/null && loginctl >& /dev/null; then
 fi
 
 alias lh='ls -ltrh'
+alias lg='git log --all --decorate --oneline --graph --color'
+
 export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
 

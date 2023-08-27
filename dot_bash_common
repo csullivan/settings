@@ -101,6 +101,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
+alias lh='ls -ltrh'
 alias lll='ll -a'
 alias duh='du -d 1 -h --exclude "./.snapshot"'
 
@@ -173,8 +174,19 @@ if which loginctl > /dev/null && loginctl >& /dev/null; then
     fi
 fi
 
-alias lh='ls -ltrh'
+# Git configurations
+if [ -f /usr/share/bash-completion/completions/git ]; then
+    . /usr/share/bash-completion/completions/git
+else
+    echo "Warning: Git auto-completion script not found!"
+fi
+
 alias lg='git log --all --decorate --oneline --graph --color'
+
+
+
+
+
 
 export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64

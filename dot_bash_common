@@ -45,9 +45,54 @@ alias tm='tmux new-session -A -s0'
 
 eval $(dircolors ~/.dir_colors)
 
+open_emacs() {
+    if [ -z "$1" ] || [[ "$1" == -* ]]; then
+        # No files provided, or flags provided, open iBuffer and kill other windows
+        emacsclient -a '' -c "$@" -e '(progn (ibuffer) (delete-other-windows))'
+    else
+        # Files provided, use them to open files or do other tasks
+        emacsclient -a '' -c "$@"
+    fi
+}
+
+ec() {
+    if [[ $1 == "--git-resolve" ]]; then
+        # Check if we're in a git repo
+        if git rev-parse --is-inside-work-tree &> /dev/null; then
+            # Declare an array of conflict patterns
+            declare -a conflict_patterns=("both modified:" "both added:" "both deleted:" "deleted by them:" "deleted by us:" "added by us:" "added by them:")
+
+            # Initialize an empty array to store conflict files
+            declare -a conflict_files=()
+
+            # Iterate over each conflict pattern and collect filenames
+            for pattern in "${conflict_patterns[@]}"; do
+                while IFS= read -r line; do
+                    conflict_files+=("$line")
+                done < <(git status | grep "$pattern" | awk '{print $NF}')
+            done
+
+            if [ ${#conflict_files[@]} -gt 0 ]; then
+                file_list=$(printf "%s," "${conflict_files[@]}")
+                file_list=${file_list%,}  # Remove trailing comma
+                emacsclient -e "(process-conflict-files-from-shell \"$file_list\")"
+                open_emacs
+            else
+                echo "No conflict files found!"
+                open_emacs
+            fi
+        else
+            echo "You're not inside a git repository!"
+        fi
+    else
+        open_emacs "$@"
+    fi
+}
+
+
 #alias emacs="emacs -nw"
 #alias es="emacs --daemon"
-alias ec="emacsclient -a '' -c"
+# alias ec="emacsclient -a '' -c"
 alias en="emacsclient -a '' -n"
 export EDITOR="emacsclient -a '' -c -nw"
 

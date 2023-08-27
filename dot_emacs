@@ -52,6 +52,80 @@
   ;; Add any additional multiple-cursors configurations here
   )
 
+;;; Support --git-resolve on emacsclient which opens all files in a git
+;;; repo that have conflicts that need resolution and marks them in the
+;;; BufferList for resolution with the prefix CONFLICT:
+
+(defun process-conflict-files-from-shell (file-str)
+  "Process a comma-separated string of filenames FILE-STR."
+  (message "Received file list: %s" file-str)
+  (let ((file-list (split-string file-str ",")))
+    (message "Processed file list: %s" file-list)
+    (process-conflict-files file-list)))
+
+
+(defun process-conflict-files (file-list)
+  "Open each file in FILE-LIST and mark it as a conflict buffer."
+  (dolist (file-path file-list)
+    (with-current-buffer (get-buffer-create file-path)
+      (set (make-local-variable 'conflict-buffer) t)
+      (unless (file-exists-p file-path)
+        (insert (format "File not found: %s" file-path))))))
+
+;; Adjust buffer list ordering to prioritize conflict buffers
+(defun conflict-first-buffer-menu ()
+  (setq tabulated-list-entries
+        (sort tabulated-list-entries
+              (lambda (a b)
+                (let* ((buf-a (find-buffer-visiting (aref (cadr a) 3)))
+                       (buf-b (find-buffer-visiting (aref (cadr b) 3)))
+                       (conflict-a (and buf-a (buffer-local-value 'conflict-buffer buf-a)))
+                       (conflict-b (and buf-b (buffer-local-value 'conflict-buffer buf-b))))
+                  (and conflict-a (not conflict-b)))))))
+
+(add-hook 'buffer-menu-mode-hook 'conflict-first-buffer-menu)
+
+;; TODO(csullivan) update this to sort the helm-buffer-list
+(require 'seq)
+(defun sort-conflict-buffers-first ()
+  "Sort conflict buffers to the top of the buffer list."
+  (let ((conflict-bufs (sort (seq-filter (lambda (buf)
+                                           (buffer-local-value 'conflict-buffer buf))
+                                         (buffer-list))
+                             (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
+        (non-conflict-bufs (sort (seq-filter (lambda (buf)
+                                               (not (buffer-local-value 'conflict-buffer buf)))
+                                             (buffer-list))
+                                 (lambda (a b) (string< (buffer-name a) (buffer-name b))))))
+    (dolist (buf non-conflict-bufs)
+      (bury-buffer buf))
+    (dolist (buf conflict-bufs)
+      (switch-to-buffer buf t t))))
+
+
+(defun process-conflict-files (file-list)
+  "Open each file in FILE-LIST and mark it as a conflict buffer."
+  (dolist (file-path file-list)
+    (with-current-buffer (find-file-noselect file-path)
+      (set (make-local-variable 'conflict-buffer) t)
+      (unless (string-prefix-p "CONFLICT: " (buffer-name))
+        (rename-buffer (concat "CONFLICT: " (buffer-name)))))
+  )
+  (sort-conflict-buffers-first)
+)
+
+
+
+(defun conflict-buffers-face (id cols)
+  (let ((buffer (find-buffer-visiting (aref cols 3))))
+    (if (and buffer (buffer-local-value 'conflict-buffer buffer))
+        '(:background "yellow")
+      nil)))
+
+(add-to-list 'tabulated-list-format
+             '("Buffer" 22 t nil nil nil conflict-buffers-face))
+
+
 
 
 ;;;;;;; Auto generated

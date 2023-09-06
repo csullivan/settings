@@ -27,7 +27,7 @@ else
 fi
 export PS1="\[\e[${USER_COLOR}m\]\u\[\e[1;32m\]@\[\e[${SERVER_COLOR}m\]\h\[\e[1;34m\] \w \$\[\e[m\] "
 
-export HISTFILESIZE=10000
+export HISTFILESIZE=1000000
 #export PROMPT_COMMAND="history 1 | record_command.py -p"
 
 # #Make handling the DISPLAY variable a bit easier with screen.

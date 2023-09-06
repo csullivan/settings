@@ -24,7 +24,12 @@
 ;; Configure C-h as backspace
 (global-set-key (kbd "C-h") 'backward-delete-char)
 ;; Comment a region
-(global-set-key (kbd "C-x ;") 'comment-region)
+(global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
+;; Toggle line wrap
+(global-set-key (kbd "C-x l") 'toggle-truncate-lines)
+;; Look up symbol definitions
+(global-set-key (kbd "C-c d") 'xref-find-definitions)
+(global-set-key (kbd "C-c e") 'xref-find-definitions-other-window)
 
 
 ;;; Begin use-package configs

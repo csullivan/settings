@@ -29,6 +29,50 @@
 
 ;;; Begin use-package configs
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;         Utility functions          ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; XClip clipboard handling to copy emacs kill ring to host clipboard
+;; Make sure to ssh into remote via ssh -X remote
+(defun copy-to-xclip-clipboard ()
+  (interactive)
+  (let* ((data (if (region-active-p)
+                   (buffer-substring-no-properties (region-beginning) (region-end))
+                 (current-kill 0 t)))
+         (display (shell-command-to-string "echo $DISPLAY"))
+         (process-environment (cons (concat "DISPLAY=" (string-trim display)) process-environment)))
+    (with-temp-buffer
+      (insert data)
+      (shell-command-on-region (point-min) (point-max) "xclip -selection clipboard"))))
+(global-set-key (kbd "C-c C-c") 'copy-to-xclip-clipboard)
+
+
+;; Function to update the display env var
+;; used in conjuction with tmux to update
+;; the display automatically on tmux attach
+(defun update-display-environment ()
+  "Prompt the user to update the DISPLAY environment variable."
+  (interactive)
+  (let ((new-value (read-string "Enter new value for DISPLAY: ")))
+    (setenv "DISPLAY" new-value)
+    (message "DISPLAY set to %s" new-value)))
+
+
+;; From https://stackoverflow.com/a/24357106/2689797
+(defun append-to-list (list-var elements)
+  "Append ELEMENTS to the end of LIST-VAR"
+  (declare (indent 1))
+  (unless (consp elements)
+    (error "ELEMENTS must be a list"))
+  (let ((list (symbol-value list-var)))
+    (if list
+        (setcdr (last list) elements)
+      (set list-var elements)))
+  (symbol-value list-var))
+
+
 ;; Initialize Helm
 (use-package helm
   :ensure t

@@ -40,8 +40,57 @@ export HISTFILESIZE=1000000
 
 #Same thing, but for tmux.  Much more pleasant to work with.
 alias dis='export $(tmux showenv | grep DISPLAY)'
-
 alias tm='tmux new-session -A -s0'
+
+tmux-attach() {
+    OPTIND=1
+    local session_name=""
+
+    while getopts "t:" opt; do
+	case $opt in
+            t)
+		session_name=$OPTARG
+		;;
+            \?)
+		echo "Invalid option: -$OPTARG" >&2
+		return 1
+		;;
+            :)
+		echo "Option -$OPTARG requires an argument." >&2
+		return 1
+		;;
+	esac
+    done
+
+    # Set DISPLAY for all panes
+    if [ -n "$session_name" ]; then
+	
+        tmux list-panes -s -F '#{pane_id}' -t "$session_name" 2>/dev/null | while read pane; do
+            current_command=$(tmux display-message -p -t "$pane" "#{pane_current_command}")
+            if [[ "$current_command" == "bash" ]]; then
+                tmux send-keys -t "$pane" "export DISPLAY=$DISPLAY" C-m
+            elif [[ "$current_command" =~ "emacs" ]]; then
+		tmux send-keys -t "$pane" "M-x"
+		sleep 0.1
+		tmux send-keys -t "$pane" "update-display-environment"
+		sleep 0.1
+		tmux send-keys -t "$pane" C-m
+		sleep 0.1
+		tmux send-keys -t "$pane" "$DISPLAY"
+		sleep 0.1
+		tmux send-keys -t "$pane" C-m
+		sleep 0.1
+            fi
+        done
+	
+        # Attach to the session with specified name
+        tmux attach -t "$session_name"
+    else
+        # Attach to the most recent session without specifying its name
+        tmux attach
+    fi
+}
+
 
 eval $(dircolors ~/.dir_colors)
 

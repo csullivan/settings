@@ -120,7 +120,242 @@
           (split-width-threshold 0))
       (undo-tree-visualize))))
 
+(use-package magit
+  :ensure t
+  :bind ("C-x C-g" . magit-status)
+  ;; :config
+  )
+
+(use-package multi-term
+  :ensure t
+  :config
+  (setq multi-term-program "/bin/bash") ;; Or whatever shell you prefer.
+  :bind (("C-x t" . my-multi-term)))
   
+(defun my-multi-term ()
+  "Open multi-term in a split below."
+  (interactive)
+  (split-window-below)
+  (windmove-down)
+  (multi-term))
+
+(defun term-check-exit ()
+  "Close window when the term process exits."
+  (when (not (process-live-p (get-buffer-process (current-buffer))))
+    (delete-window)))
+
+(add-hook 'term-exec-hook 'term-check-exit)
+
+
+;; TVM FFI LSP language server configuration
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;        LSP customizations          ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; For the TVM-specific langage server,
+;; sudo pip3 install ffi-navigator
+
+(use-package lsp-mode
+  :ensure t
+  :hook
+  (c-mode-common . lsp)
+  (python-mode . lsp)
+  :init
+  (setq lsp-keymap-prefix "C-c C-d")
+  :config
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-signature-render-documentation nil)
+
+  ;; TODO: Run the check for ffi-navigator asynchronously
+  (when (= 0 (call-process-shell-command "pip3 list | grep ffi-navigator" nil nil nil))
+    (lsp-register-client
+     (make-lsp-client
+      :new-connection (lsp-stdio-connection '("python3" "-m" "ffi_navigator.langserver"))
+      :major-modes '(python-mode c++-mode)
+      :server-id 'ffi-navigator
+      :add-on? t))
+    )
+  )
+
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-progress-via-spinner nil)
+  (setq lsp-progress-function 'ignore)
+  )
+
+;; Add python language server.  Version of jedi is to maintain
+;; compatibility with IPython 7.13 (ubuntu 20.04's apt version).
+;; Latest PyPI version of ipython is compability with latest jedi.
+
+;; sudo pip3 install jedi-language-server "jedi<0.18.0"
+(use-package lsp-jedi
+  :ensure t)
+
+;; LSP mode doesn't open lsp-progress-via-spinner in
+;; lsp--spinner-start, can leave spinners running if a workspace takes
+;; a while to initialize or has an error while initializing.  Revoking
+;; all spinner privileges as a result.
+(use-package "spinner"
+   :defer t
+   :config
+   (defun spinner-start (&optional type-or-object fps delay)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;        C++ customizations          ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; For LSP integration, for each project, either add these commands to
+;; CMakeLists.txt, or compile with `cmake
+;; -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..`
+
+;; Or, in CMakeLists.txt
+;; set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+;; # Also needed for cmake<3.18.0 (https://gitlab.kitware.com/cmake/cmake/-/issues/16588)
+;; set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+;; Or, with cmake>=3.17, can set environment variable
+;; export CMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+;; Ubuntu 20.04's apt has clangd 10.0, which doesn't look in build
+;; subdir for compile_commands.json.  Can symlink to
+;; build/compile_commands.json, but I'm lazy so I download clangd 13.0
+;; in the settings/install.py
+
+
+
+;; Find-file configurations
+
+(use-package find-file
+  :ensure t
+  :config
+  (setq-default ff-always-in-other-window nil)
+  (setq cc-search-directories
+        '("." "../src" "../include" "src" "include" "/usr/include"
+          "./*/include" "../include/*" "../include/*/detail"
+          "../../src" "../../include"
+          "../../../src" "../libraries/*"
+          "../../../include" "../libraries/*/*"
+          "../../*/include" "../../*/src" "../*/*/src"
+          ))
+  (setq cc-other-file-alist
+        '(("\\.cc\\'" (".hh" ".h"))
+          ("\\.hh\\'" (".cc" ".C" ".cxx" ".cu"))
+          ("\\.c\\'" (".h"))
+          ("\\.h\\'" (".cxx" ".c" ".cc" ".C" ".CC" ".cpp" ".cu"))
+          ("\\.C\\'" (".H" ".hh" ".h"))
+          ("\\.H\\'" (".C" ".CC"))
+          ("\\.CC\\'" (".HH" ".H" ".hh" ".h"))
+          ("\\.HH\\'" (".CC"))
+          ("\\.c\\+\\+\\'" (".h++" ".hh" ".h"))
+          ("\\.h\\+\\+\\'" (".c++"))
+
+          ("\\.cu\\'" (".hh" ".h"))
+          ("\\.cuh\\'" (".cu"))
+          ("\\.cpp\\'" (".hpp" ".hh" ".h"))
+          ("\\.hpp\\'" (".cpp"))
+          ("\\.cxx\\'" (".h" ".hxx" ".hh"))
+          ("\\.hxx\\'" (".cxx"))
+          ))
+  )
+
+;; Auto formatting for c-lang files
+(defconst my-c-style
+  '((c-electric-pound-behavior . 'alignleft)
+
+    (c-basic-offset . 2)
+
+    (c-tab-always-indent . t)
+
+    (indent-tabs-mode . nil)
+
+    (c-hanging-braces-alist . ((block-open after)
+                               (substatement-open after)
+                               (substatement-close)
+                               (brace-list-open)
+                               (substatement-open)
+                               (class-open after)
+                               (defun-open after)
+                               (defun-close)
+                               ))
+
+    (c-hanging-colons-alist . ((member-init-intro before)
+                               (inher-intro)
+                               (case-label after)
+                               (access-label after)
+                               (label after)))
+
+    (c-cleanup-list . (scope-operator
+                       defun-close-semi
+                       brace-else-brace
+                       brace-elseif-brace
+                       brace-catch-brace))
+
+    (c-offsets-alist . ((arglist-close . c-lineup-arglist)
+                        (arglist-intro . +)
+                        (arglist-close . 0)
+                        (case-label . +)
+                        (statement-case-intro . +)
+                        (inclass . +)
+                        (access-label . -)
+                        (label . -)
+                        (substatement-open . 0)
+                        (innamespace . [0])
+                        (block-open . 0)))
+    )
+  "My C++/C Programming Style")
+
+(use-package cc-mode
+  :ensure nil
+  :mode ("\\.h$" . c++-mode)
+  :bind (:map c-mode-base-map
+              ("C-c C-f" . ff-find-other-file)
+              ("C-j" . newline-and-indent)
+              ;; ("C-c C-c" . find-makefile-compile)
+	      )
+
+  :config
+  (c-toggle-auto-newline -1)
+  (c-toggle-hungry-state -1)
+  (c-add-style "my-c-lang-style" my-c-style)
+  (add-to-list 'c-default-style '(c-mode . "my-c-lang-style"))
+  (add-to-list 'c-default-style '(c++-mode . "my-c-lang-style"))
+  (add-to-list 'c-default-style '(cuda-mode . "my-c-lang-style"))
+  )
+
+(use-package lsp-clangd
+  :ensure nil
+  :config
+  (setq lsp-clients-clangd-args
+        (append-to-list `lsp-clients-clangd-args '("--query-driver=/usr/bin/**"))))
+
+(use-package cuda-mode
+  :ensure t
+  :load-path "misc"
+  :mode ("\\.cu$" "\\.cuh$"))
+
+(use-package clang-format+
+  :hook (c-mode-common . clang-format+-mode))
+
+;; Go to previous buffer
+(use-package winner
+  :ensure t  ; Ensure winner is installed (it should be as it's part of Emacs by default, but this is here for completeness)
+  :init
+  (winner-mode 1)  ; Enable winner-mode globally
+  :bind
+  ("C-c r" . winner-undo)
+  ("C-c f" . winner-redo)
+  )
+
+;; UniteAI lsp config https://github.com/freckletonj/uniteai
+(load-file "~/.emacs.d/unite_ai_lsp_mode_config.el")
+
 ;;; End use-package configs
 
 
@@ -199,7 +434,6 @@
 
 
 
-
 ;;;;;;; Auto generated
 
 (custom-set-variables
@@ -207,7 +441,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(undo-tree rebecca-theme use-package helm)))
+ '(package-selected-packages '(magit undo-tree rebecca-theme use-package helm)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

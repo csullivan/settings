@@ -353,8 +353,14 @@
   ("C-c f" . winner-redo)
   )
 
+;; TODO(csullivan): figure out what is using the GPU
 ;; UniteAI lsp config https://github.com/freckletonj/uniteai
-(load-file "~/.emacs.d/unite_ai_lsp_mode_config.el")
+;; (load-file "~/.emacs.d/unite_ai_lsp_mode_config.el")
+
+;; Automatically format python buffers
+(use-package blacken
+  :ensure t
+  :hook (python-mode . blacken-mode))
 
 ;;; End use-package configs
 

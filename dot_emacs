@@ -51,7 +51,7 @@
     (with-temp-buffer
       (insert data)
       (shell-command-on-region (point-min) (point-max) "xclip -selection clipboard"))))
-(global-set-key (kbd "C-c C-c") 'copy-to-xclip-clipboard)
+(global-set-key (kbd "C-c c") 'copy-to-xclip-clipboard)
 
 
 ;; Function to update the display env var

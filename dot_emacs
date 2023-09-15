@@ -500,6 +500,16 @@
 ;; Add to the list of modes
 (add-to-list 'auto-mode-alist '("\\.lh\\'" . link-highlight-mode))
 
+;; Enable truncate lines in fundamental mode for python files
+;; This is helpful for opening large TVM IRModule python buffers
+(defun my-enable-truncate-lines-for-literal ()
+  "Enable `truncate-lines` for buffers opened with `find-file-literally`."
+  (when (and (eq major-mode 'fundamental-mode)
+             (string-match-p "\\.py\\'" (or (buffer-file-name) "")))
+    (setq truncate-lines t)))
+
+(add-hook 'after-change-major-mode-hook 'my-enable-truncate-lines-for-literal)
+
 
 
 

@@ -2,7 +2,7 @@
         name = Chris Sullivan
         email = csullivan@octoml.ai
 [core]
-	editor = emacsclient -c -a emacs
+	editor = emacsclient -a '' -c "$@" -nw
 	excludesFile = ~/.gitignore
 [push]
         default = simple

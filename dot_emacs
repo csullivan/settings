@@ -440,6 +440,70 @@
 
 
 
+
+;;;;;;;
+;; Define the mode and its keymap
+(defvar link-highlight-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<mouse-1>") 'link-highlight-click)
+    map)
+  "Keymap for `link-highlight-mode`.")
+
+;; Syntax highlighting
+(defvar link-highlight-font-lock-keywords
+  `(
+    (, (concat "File \"\\([^\"]+\\.cc\\|[^\"]+\\.py\\)\", line \\([0-9]+\\)") . (1 font-lock-keyword-face))
+    (, (concat "\"\\([^\"]+\\.cc\\|[^\"]+\\.py\\):\\([0-9]+\\):") . (1 font-lock-string-face))
+    (, (concat "'\\([^']+\\.cc\\|[^']+\\.py\\):\\([0-9]+\\)'") . (1 font-lock-function-name-face))
+    (, (concat "'\\([^']+\\.cc\\|[^']+\\.py\\):\\([0-9]+\\)'") . (1 font-lock-constant-face))
+   )
+  "Highlighting expressions for `link-highlight-mode`.")
+
+;; Major mode definition
+(define-derived-mode link-highlight-mode fundamental-mode "LinkHighlight"
+  "Major mode to highlight and open file paths."
+  (setq font-lock-defaults '((link-highlight-font-lock-keywords))))
+
+(defun parse-and-extract (line)
+  "Parse the LINE and extract file paths and line numbers."
+  (let ((patterns '(
+                    "File \"\\([^\"]+\\.cc\\|[^\"]+\\.py\\)\", line \\([0-9]+\\)"
+                    "\"\\([^\"]+\\.cc\\|[^\"]+\\.py\\):\\([0-9]+\\):"
+                    "'\\([^']+\\.cc\\|[^']+\\.py\\):\\([0-9]+\\)'"
+                    "\"\\([^\"]+\\.cc\\|[^\"]+\\.py\\)\":\\s-"
+                    ))
+        matches)
+    (dolist (pattern patterns)
+      (let ((match (string-match pattern line)))
+        (when match
+          (setq matches (append matches (list (list (match-string 1 line) (match-string 2 line))))))))
+    matches))
+
+(defun link-highlight-open-at-point ()
+  "Open the file and navigate to the line number based on the current cursor position."
+  (interactive)
+  (let ((line (thing-at-point 'line t)))
+    (message "Trying to parse line: %s" line)
+    (dolist (match (parse-and-extract line))
+      (message "Matched file: %s, line: %s" (car match) (cadr match))
+      (let ((file (car match))
+            (line-number (cadr match)))
+        (when file
+          (find-file file)
+          (when line-number
+            (goto-line (string-to-number line-number))))))))
+
+;; Bind the function to a key within link-highlight-mode
+(define-key link-highlight-mode-map (kbd "C-c o") 'link-highlight-open-at-point)
+
+
+;; Add to the list of modes
+(add-to-list 'auto-mode-alist '("\\.lh\\'" . link-highlight-mode))
+
+
+
+
+
 ;;;;;;; Auto generated
 
 (custom-set-variables

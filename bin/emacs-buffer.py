@@ -18,6 +18,7 @@ class EmacsRedirect:
         verbose=False,
         max_chars_per_write=500,
         min_time_between_write=datetime.timedelta(seconds=0.5),
+        directory=".",
     ):
         self.buffer_name = buffer_name
         self.max_chars_per_write = max_chars_per_write
@@ -25,6 +26,7 @@ class EmacsRedirect:
         self.verbose = verbose
         self.tee = tee
         self.raw = raw
+        self.directory = directory
 
         self.chars = []
         self.last_write_time = datetime.datetime.now()
@@ -98,8 +100,10 @@ class EmacsRedirect:
         command = f"""
         (with-current-buffer {buf}
           {commands}
+          (setq default-directory "{self.directory}/")
         )
         """
+
         return command
 
     def command_get_buffer(self):
@@ -109,6 +113,16 @@ class EmacsRedirect:
         buf = self.command_get_buffer()
         return f"""
         (with-current-buffer {buf} (erase-buffer))
+        """
+
+    def command_switch_to_buffer(self):
+        buf = self.command_get_buffer()
+        return f"""
+        (with-current-buffer {buf}
+          (switch-to-buffer (current-buffer))
+          (goto-char (point-max))
+          (unless (bound-and-true-p link-highlight-mode)
+            (link-highlight-mode)))
         """
 
     def command_append_text(self):
@@ -187,8 +201,11 @@ def main(args):
         append=args.append,
         tee=args.tee,
         verbose=args.verbose,
+        directory=args.directory,
     )
     redirect.read_from(sys.stdin)
+    if args.activate:
+        redirect.send_command(redirect.command_switch_to_buffer())
 
 
 def arg_main():
@@ -223,6 +240,18 @@ def arg_main():
         "--verbose",
         action="store_true",
         help="Print all commands that are sent to the emacsclient",
+    )
+    parser.add_argument(
+        "-A",
+        "--activate",
+        action="store_true",
+        help="Activate the emacs buffer after writing.",
+    )
+    parser.add_argument(
+        "-d",
+        "--directory",
+        default=".",
+        help="The directory to set for the Emacs buffer.",
     )
 
     args = parser.parse_args()

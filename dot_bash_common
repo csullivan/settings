@@ -95,14 +95,36 @@ tmux-attach() {
 eval $(dircolors ~/.dir_colors)
 
 open_emacs() {
-    if [ -z "$1" ] || [[ "$1" == -* ]]; then
-        # No files provided, or flags provided, open iBuffer and kill other windows
-        emacsclient -a '' -c "$@" -e '(progn (ibuffer) (delete-other-windows))'
-    else
+    local literally=false
+    local filename=""
+    local flags=()   # To store flags
+
+    # Process all arguments
+    for arg in "$@"; do
+        if [[ "$arg" == "-l" || "$arg" == "--literally" ]]; then
+            literally=true
+        elif [[ "$arg" == "-nwl" ]]; then
+            literally=true
+            flags+=("-nw")
+        elif [[ "$arg" == -* ]]; then
+            flags+=("$arg")  # Store flags like -nw
+        else
+            filename="$arg"
+        fi
+    done
+
+    if $literally && [ -n "$filename" ]; then
+        # Open file using find-file-literally
+        emacsclient -a '' -c "${flags[@]}" -e "(find-file-literally \"$filename\")"
+    elif [ -n "$filename" ]; then
         # Files provided, use them to open files or do other tasks
-        emacsclient -a '' -c "$@"
+        emacsclient -a '' -c "${flags[@]}" "$filename"
+    else
+        # No files provided, or only flags provided, open iBuffer and kill other windows
+        emacsclient -a '' -c "${flags[@]}" -e '(progn (ibuffer) (delete-other-windows))'
     fi
 }
+
 
 ec() {
     if [[ $1 == "--git-resolve" ]]; then

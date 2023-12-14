@@ -160,6 +160,12 @@ ec() {
     fi
 }
 
+# Get the most recent docker containers port with the image name provided
+get_docker_port() {
+    IMAGE_NAME=$1
+    export PORT=$(docker ps | grep $IMAGE_NAME | awk '{print $1}' | xargs -I {} docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{println $p "->" (index $conf 0).HostPort}}{{end}}' {} | grep '8080/tcp' | awk -F ' -> ' '{print $2}')
+    echo "export PORT=$PORT; Done."
+}
 
 #alias emacs="emacs -nw"
 #alias es="emacs --daemon"

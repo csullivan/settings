@@ -254,8 +254,11 @@ fi
 
 alias lg='git log --all --decorate --oneline --graph --color'
 
-
-
+# Prevent pip popup unnecessarily asking to unlock the "kdewallet"
+# keyring.
+#
+# https://github.com/pypa/pip/issues/8090#issuecomment-803363268
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 
 

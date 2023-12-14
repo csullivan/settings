@@ -146,6 +146,11 @@
 
 (add-hook 'term-exec-hook 'term-check-exit)
 
+;; Support color codes in a buffer
+(defun colorize-current-buffer ()
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
 
 ;; TVM FFI LSP language server configuration
 

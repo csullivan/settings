@@ -27,16 +27,8 @@ else
 fi
 export PS1="\[\e[${USER_COLOR}m\]\u\[\e[1;32m\]@\[\e[${SERVER_COLOR}m\]\h\[\e[1;34m\] \w \$\[\e[m\] "
 
-export HISTFILESIZE=1000000
-#export PROMPT_COMMAND="history 1 | record_command.py -p"
-
-# #Make handling the DISPLAY variable a bit easier with screen.
-# if ps -ocommand= -p $PPID | grep --quiet SCREEN; then
-#     source ~/.DISPLAY.sh
-# else
-#     alias screen="echo 'export DISPLAY=$DISPLAY' > ~/.DISPLAY.sh; screen"
-# fi
-# alias dis='source ~/.DISPLAY.sh'
+HISTSIZE=-1
+HISTFILESIZE=-1
 
 #Same thing, but for tmux.  Much more pleasant to work with.
 alias dis='export $(tmux showenv | grep DISPLAY)'

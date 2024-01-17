@@ -261,6 +261,7 @@ export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 
 export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+export CUDACXX=/usr/local/cuda/bin/nvcc
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
 
 export TVM_HOME=$HOME/projects/tvm
@@ -268,3 +269,7 @@ export PYTHONPATH=$PYTHONPATH:$TVM_HOME/python
 export PATH=$PATH:$HOME/settings/scripts:$HOME/settings/bin
 
 
+
+# Triton Hopper env vars
+export ENABLE_MMA_V3=1
+export ENABLE_TMA=1 

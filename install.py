@@ -107,12 +107,12 @@ def installPyPackage(tarball):
 def download_clangd():
     clangd_symlink = os.path.join(os.path.dirname(__file__), "bin", "clangd")
     clangd_loc = os.path.join(
-        os.path.dirname(__file__), "bin", "clangd_12.0.0", "bin", "clangd"
+        os.path.dirname(__file__), "bin", "clangd_16.0.2", "bin", "clangd"
     )
     if os.path.exists(clangd_symlink):
         return
 
-    url = "https://github.com/clangd/clangd/releases/download/12.0.0/clangd-linux-12.0.0.zip"
+    url = "https://github.com/clangd/clangd/releases/download/16.0.2/clangd-linux-16.0.2.zip"
     response = urllib.request.urlopen(url)
     contents = io.BytesIO(response.read())
     zipped = zipfile.ZipFile(contents)

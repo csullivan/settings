@@ -61,7 +61,9 @@ def link_all_ipython():
         link(startup_file, os.path.join(ipython_dir, script_name))
 
 
-git_bin = "git" if system in ["Linux", "Darwin"] else "c:/Program Files (x86)/Git/bin/git.exe"
+git_bin = (
+    "git" if system in ["Linux", "Darwin"] else "c:/Program Files (x86)/Git/bin/git.exe"
+)
 
 
 def clone_git(url, outputDir):
@@ -140,7 +142,9 @@ def add_bash_common():
             f.write(bashrc)
 
 
-dot_emacs_path = "~" if system in ["Linux", "Darwin"] else path("~", "AppData", "Roaming")
+dot_emacs_path = (
+    "~" if system in ["Linux", "Darwin"] else path("~", "AppData", "Roaming")
+)
 emacs_dir = path(dot_emacs_path, ".emacs.d")
 dot_emacs = path(dot_emacs_path, ".emacs")
 

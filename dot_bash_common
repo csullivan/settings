@@ -251,6 +251,7 @@ else
 fi
 
 alias lg='git log --all --decorate --oneline --graph --color'
+alias gs='git status -u no'
 
 # Prevent pip popup unnecessarily asking to unlock the "kdewallet"
 # keyring.

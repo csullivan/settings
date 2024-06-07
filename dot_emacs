@@ -1,6 +1,14 @@
 ;;; Initialize package management
 (require 'package)
 
+;; Need to verify melp keys on new machines to download packages
+;; gpg --homedir ~/.emacs.d/elpa/gnupg --keyserver hkps://keyserver.ubuntu.com --receive-keys 645357D2883A0966
+;; (setq package-check-signature 'allow-unsigned)
+;; (setq gnutls-verify-error t)
+;; (setq package-gnupghome-dir "~/.emacs.d/elpa/gnupg")
+
+
+
 (add-to-list
  'package-archives
  '("melpa" . "https://melpa.org/packages/")

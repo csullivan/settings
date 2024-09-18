@@ -11,7 +11,10 @@ from datetime import datetime, timedelta
 
 @click.command()
 @click.option(
-    "--hours-ago", default=0, help="Number of hours to subtract from current time"
+    "--hours-ago",
+    default=0,
+    help="Number of hours to subtract from current time",
+    required=True,
 )
 def main(hours_ago):
     new_date = datetime.now() - timedelta(hours=hours_ago)

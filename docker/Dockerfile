@@ -27,6 +27,10 @@ RUN apt-get install -y sudo
 RUN apt install -y tmux
 RUN apt install -y docker
 RUN apt install -y nvtop
+RUN apt install -y git-lfs
+RUN git lfs install
+
+
 
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 
@@ -35,6 +39,10 @@ RUN echo "csullivan ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/csullivan
 
 RUN python3 -m pip install torch torchvision torchaudio
 RUN python3 -m pip install transformers
+
+# axolotl
+RUN pip3 install packaging
+RUN pip3 install -e '.[flash-attn,deepspeed]'
 
 
 

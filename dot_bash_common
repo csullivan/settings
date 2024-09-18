@@ -274,3 +274,7 @@ export PATH=$PATH:$HOME/settings/scripts:$HOME/settings/bin
 # Triton Hopper env vars
 export ENABLE_MMA_V3=1
 export ENABLE_TMA=1 
+export PATH=/opt/nvidia/nsight-systems/2024.4.1/bin/:$PATH
+
+# Fix for pytorch pip package version of cublas not finding the jit libs
+# export LD_LIBRARY_PATH=$HOME/path/to/my/venv3115/lib64/python3.11/site-packages/nvidia/nvjitlink/lib:$LD_LIBRARY_PATH

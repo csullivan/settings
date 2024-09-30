@@ -1,0 +1,1 @@
+crun -q 'cpu.arch=x86_64 and gpu.chip=gh100' --image gitlab-master.nvidia.com:5005/chrsullivan/dev -i

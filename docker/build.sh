@@ -1,1 +1,3 @@
-docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t csullivan-dev .
+docker build -t csullivan-dev .
+docker tag csullivan-dev:latest gitlab-master.nvidia.com:5005/chrsullivan/dev
+docker push gitlab-master.nvidia.com:5005/chrsullivan/dev

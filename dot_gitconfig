@@ -1,6 +1,6 @@
 [user]
         name = Chris Sullivan
-        email = csullivan@octo.ai
+        email = chris@sullivan.ai
 [core]
 	editor = emacsclient -a '' -c "$@" -nw
 	excludesFile = ~/.gitignore

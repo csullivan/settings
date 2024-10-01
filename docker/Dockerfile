@@ -1,16 +1,19 @@
 # Start from the PyTorch image
 FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-devel
 
-# Install curl
+
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl wget libglib2.0-0 && \
     apt-get clean
 
 # Install Node.js via Nodesource setup script
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs
 
-
+# Install nsys as this base image only contains nsight compute
+ARG NSYS_URL=https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_4/
+ARG NSYS_PKG=NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
+RUN wget ${NSYS_URL}${NSYS_PKG} && dpkg -i $NSYS_PKG && rm $NSYS_PKG
 
 # Update and install necessary tools
 RUN apt update && apt install -y wget curl software-properties-common
@@ -31,8 +34,8 @@ RUN git lfs install
 
 
 # Clean up the apt cache to reduce the image size
-# RUN apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/conda/lib/python3.11/site-packages/nvidia/cudnn/lib
 CMD ["bash"]

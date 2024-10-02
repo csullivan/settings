@@ -187,6 +187,26 @@
       "key": "ctrl+x 1",
       "command": "workbench.action.terminal.moveToEditor",
       "when": "terminalFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+o",
+      "command": "workbench.action.moveEditorToNextGroup",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+p",
+      "command": "workbench.action.moveEditorToPreviousGroup",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+o",
+      "command": "workbench.action.moveEditorToNextGroup",
+      "when": "terminalFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+p",
+      "command": "workbench.action.moveEditorToPreviousGroup",
+      "when": "terminalFocus"
     }
   ]
   

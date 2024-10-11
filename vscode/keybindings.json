@@ -1,212 +1,212 @@
 // Place your key bindings in this file to override the defaults
 [
-    // This disables the global Awesome Emacs Keymap bind so my debug keybind works
-    {
-      "key": "ctrl+x ctrl+x",
-      "command": "-emacs-mcx.exchangePointAndMark",
-      "when": "editorTextFocus"
+  // This disables the global Awesome Emacs Keymap bind so my debug keybind works
+  {
+    "key": "ctrl+x ctrl+x",
+    "command": "-emacs-mcx.exchangePointAndMark",
+    "when": "editorTextFocus"
+  },
+  { 
+    "key": "ctrl+r",                
+    "command": "-emacs-mcx.isearchBackward",
+    "when": "!findInputFocussed" 
+  },
+  { 
+    "key": "ctrl+s",                
+    "command": "-emacs-mcx.isearchForward",
+    "when": "!findInputFocussed" 
+  },
+  { 
+    "key": "ctrl+w",
+    "command": "-emacs-mcx.killRegion",
+    "when": "editorTextFocus && !editorReadonly" 
+  },
+  {
+    "key": "ctrl+g",
+    "command": "-emacs-mcx.cancel",
+    "when": "editorTextFocus" 
+  },
+  { 
+    "key": "ctrl+space",
+    "command": "-emacsMarkMode.toggle",
+  },
+  {
+    "key": "ctrl+space",
+    "command": "emacsMarkMode.toggle",
+    "when": "editorTextFocus"
+  },
+  // { 
+  //   "key": "ctrl+r",
+  //   "command": "editor.action.previousMatchFindAction",
+  //   "when": "findInputFocussed" 
+  // },
+  {
+    "key": "escape shift+.",
+    "command": "cursorBottom"
+  },
+  {
+    "key": "escape shift+,",
+    "command": "cursorTop"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "extension.incrementalSearch.backward",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+s",
+    "command": "extension.incrementalSearch.forward",
+    "when": "editorTextFocus"
+  },
+  // {
+  //   "key": "ctrl+r", 
+  //   "command": "swiper.swiper",
+  //   "when": "editorTextFocus"
+  // }
+  // Next up fix reverse search 
+  { 
+    "key": "ctrl+k",
+    "command": "emacs-mcx.killLine",
+    "when": "terminalFocus" 
+  },
+  { 
+    "key": "ctrl+x t",
+    "command": "workbench.action.terminal.newWithCwd",
+    "args": {
+      "cwd": "${fileDirname}"
     },
-    { 
-      "key": "ctrl+r",                
-      "command": "-emacs-mcx.isearchBackward",
-      "when": "!findInputFocussed" 
-    },
-    { 
-      "key": "ctrl+s",                
-      "command": "-emacs-mcx.isearchForward",
-      "when": "!findInputFocussed" 
-    },
-    { 
-      "key": "ctrl+w",
-      "command": "-emacs-mcx.killRegion",
-      "when": "editorTextFocus && !editorReadonly" 
-    },
-    {
-      "key": "ctrl+g",
-      "command": "-emacs-mcx.cancel",
-      "when": "editorTextFocus" 
-    },
-    { 
-      "key": "ctrl+space",
-      "command": "-emacsMarkMode.toggle",
-    },
-    {
-      "key": "ctrl+space",
-      "command": "emacsMarkMode.toggle",
-      "when": "editorTextFocus"
-    },
-    // { 
-    //   "key": "ctrl+r",
-    //   "command": "editor.action.previousMatchFindAction",
-    //   "when": "findInputFocussed" 
-    // },
-    {
-      "key": "escape shift+.",
-      "command": "cursorBottom"
-    },
-    {
-      "key": "escape shift+,",
-      "command": "cursorTop"
-    },
-    {
-      "key": "ctrl+r",
-      "command": "extension.incrementalSearch.backward",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "ctrl+s",
-      "command": "extension.incrementalSearch.forward",
-      "when": "editorTextFocus"
-    },
-    // {
-    //   "key": "ctrl+r", 
-    //   "command": "swiper.swiper",
-    //   "when": "editorTextFocus"
-    // }
-    // Next up fix reverse search 
-    { 
-      "key": "ctrl+k",
-      "command": "emacs-mcx.killLine",
-      "when": "terminalFocus" 
-    },
-    { 
-      "key": "ctrl+x t",
-      "command": "workbench.action.terminal.newWithCwd",
-      "args": {
-        "cwd": "${fileDirname}"
-      },
-      "when": "editorTextFocus"
-    },
-    { 
-      "key": "ctrl+x t",
-      "command": "workbench.action.terminal.moveToEditor",
-      "when": "terminalFocus"
-    },
-    {
-      "key": "ctrl+x 3",
-      "command": "workbench.action.splitEditorRight"
-    },
-    {
-      "key": "ctrl+x 2",
-      "command": "workbench.action.splitEditorDown"
-    },
-    {
-      "key": "ctrl+x 1",
-      "command": "workbench.action.editorLayoutSingle",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "ctrl+x o",
-      "command": "workbench.action.navigateEditorGroups",
-      "when": ""
-    },
-    {
-      "key": "ctrl+x p",
-      "command": "workbench.action.navigateEditorGroups",
-      "when": "editorTextFocus",
-      "args": {
-        "direction": "left"
-      }
-    },
-    {
-      "key": "ctrl+c d",
-      "command": "editor.action.revealDefinition",
-      "when": "editorTextFocus",
-    },
-    { 
-      "key": "ctrl+x ctrl+c",
-      "command": "-workbench.action.closeWindow"
-    },
-    {
-      "key": "ctrl+c <",
-      "command": "editor.fold",
-      "when": "editorTextFocus"
-    },
-    { 
-      "key": "ctrl+x b",
-      "command": "workbench.action.showAllEditorsByMostRecentlyUsed",
-      "when": "terminalFocus" 
-    },
-
-
-    // { 
-    //   "key": "ctrl+x", 
-    //   "command": "", 
-    //   "when": "terminalFocus" 
-    // },
-    // { 
-    //   "key": "ctrl+s", 
-    //   "command": "", 
-    //   "when": "terminalFocus" 
-    // },
-    {
-      "key": "escape x",
-      "command": "workbench.action.showCommands"
-    },
-    {
-      "key": "cmd+2",
-      "command": ""
-    },
-    {
-      "key": "cmd+3",
-      "command": ""
+    "when": "editorTextFocus"
+  },
+  { 
+    "key": "ctrl+x t",
+    "command": "workbench.action.terminal.moveToEditor",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+x 3",
+    "command": "workbench.action.splitEditorRight"
+  },
+  {
+    "key": "ctrl+x 2",
+    "command": "workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+x 1",
+    "command": "workbench.action.editorLayoutSingle",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+x o",
+    "command": "workbench.action.navigateEditorGroups",
+    "when": ""
+  },
+  {
+    "key": "ctrl+x p",
+    "command": "workbench.action.navigateEditorGroups",
+    "when": "editorTextFocus",
+    "args": {
+      "direction": "left"
     }
-    ,{
-      "key": "ctrl+x ;",
-      "command": "editor.action.commentLine",
-      "when": "editorTextFocus"
-    },
-    { "key": "ctrl+x ctrl+f",
-      "command": "workbench.action.quickOpen",
-      "when": "terminalFocus" 
-    },
-    {
-      "key": "ctrl+x ctrl+b",
-      "command": "workbench.files.action.focusFilesExplorer"
-    },
-    {
-      "key": "cmd+b",
-      "command": "-workbench.action.toggleSidebarVisibility"
-    },
-    {
-      "key": "Enter",
-      "command": "list.select",
-      "when": "filesExplorerFocus"
-    },
-    {
-      "key": "ctrl+x ctrl+b",
-      "command": "workbench.action.toggleSidebarVisibility",
-      "when": "filesExplorerFocus"
-    },
-    {
-      "key": "ctrl+x o",
-      "command": "workbench.action.toggleSidebarVisibility",
-      "when": "filesExplorerFocus"
-    },
-    {
-      "key": "ctrl+x 1",
-      "command": "workbench.action.terminal.moveToEditor",
-      "when": "terminalFocus"
-    },
-    {
-      "key": "ctrl+x ctrl+o",
-      "command": "workbench.action.moveEditorToNextGroup",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "ctrl+x ctrl+p",
-      "command": "workbench.action.moveEditorToPreviousGroup",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "ctrl+x ctrl+o",
-      "command": "workbench.action.moveEditorToNextGroup",
-      "when": "terminalFocus"
-    },
-    {
-      "key": "ctrl+x ctrl+p",
-      "command": "workbench.action.moveEditorToPreviousGroup",
-      "when": "terminalFocus"
-    }
-  ]
-  
+  },
+  {
+    "key": "ctrl+c d",
+    "command": "editor.action.revealDefinition",
+    "when": "editorTextFocus",
+  },
+  { 
+    "key": "ctrl+x ctrl+c",
+    "command": "-workbench.action.closeWindow"
+  },
+  {
+    "key": "ctrl+c <",
+    "command": "editor.fold",
+    "when": "editorTextFocus"
+  },
+  // { 
+  //   "key": "ctrl+x b",
+  //   "command": "workbench.action.showAllEditorsByMostRecentlyUsed",
+  // },
+  {
+    "key": "ctrl+x b",
+    "command": "workbench.action.quickOpenPreviousEditor",
+  },
+  // { 
+  //   "key": "ctrl+x", 
+  //   "command": "", 
+  //   "when": "terminalFocus" 
+  // },
+  // { 
+  //   "key": "ctrl+s", 
+  //   "command": "", 
+  //   "when": "terminalFocus" 
+  // },
+  {
+    "key": "escape x",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "cmd+2",
+    "command": ""
+  },
+  {
+    "key": "cmd+3",
+    "command": ""
+  },
+  // {
+  //   "key": "ctrl+x ;",
+  //   "command": "editor.action.commentLine",
+  //   "when": "editorTextFocus"
+  // },
+  { "key": "ctrl+x ctrl+f",
+    "command": "workbench.action.files.openFile",
+  },
+  {
+    "key": "ctrl+x ctrl+b",
+    "command": "workbench.files.action.focusFilesExplorer"
+  },
+  {
+    "key": "cmd+b",
+    "command": "-workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "Enter",
+    "command": "list.select",
+    "when": "filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+x ctrl+b",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+x o",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+x 1",
+    "command": "workbench.action.editorLayoutSingle",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+x ctrl+o",
+    "command": "workbench.action.moveEditorToNextGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+x ctrl+p",
+    "command": "workbench.action.moveEditorToPreviousGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+x ctrl+o",
+    "command": "workbench.action.moveEditorToNextGroup",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+x ctrl+p",
+    "command": "workbench.action.moveEditorToPreviousGroup",
+    "when": "terminalFocus"
+  }
+
+]

@@ -1,0 +1,17 @@
+{
+    "window.commandCenter": 1,
+    "makefile.configureOnOpen": true,
+    "vscode_custom_css.imports": [
+        "file:///Users/chrsullivan/settings/vscode/resize-quickinput-widget.js"
+    ],    
+    "workbench.editor.showTabs": "none",
+    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/ipch",
+    "workbench.activityBar.location": "bottom",
+    "workbench.editor.editorActionsLocation": "titleBar",
+    "cmake.showOptionsMovedNotification": false,
+    "editor.lineNumbers": "off",
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+}

@@ -43,17 +43,29 @@ const padding = 10; // up + bottom
 var styleElement = document.createElement("style");
 var styles = `
   .quick-input-widget {
-    box-shadow: 0 5px 10px rgba(0,0,0,0), 0 0 0 100vw rgba(0,0,0,0.15) !important;
-    top: 80px !important;
-    // width: 50% !important;
-    // margin-left: 0 !important;
-    // left: 25% !important;
-    // overflow-x: auto !important;
+    box-shadow: 0 -5px 10px rgba(0,0,0,0.1), 0 0 0 100vw rgba(0,0,0,0.15) !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    overflow-x: hidden !important;
+    #display: flex !important;
+    flex-direction: column-reverse !important;
   }
   .quick-input-widget .monaco-inputbox {
-    padding: 10px !important;
-    border-radius: 5px !important;
+    // padding: 10px !important;
+    // border-radius: 5px !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
     font-size: 14px !important;
+    order: 2;
+  }
+  .quick-input-widget .quick-input-list {
+    order: 1;
+    // max-height: 20vh !important;
   }
   .quick-input-widget .quick-input-action {
     padding-top: 10px !important;
@@ -131,12 +143,9 @@ function resize() {
     zoom(quickInputListNode, "maxHeight", "cachedMaxHeight");
     zoom(monacoListRows, "height", "cachedHeight");
     zoom(monacoListRows, "top", "cachedTop");
-    moving = false;
+    let moving = false;
     rows.forEach((row) => {
         moving = zoom(row, "top", "cachedTop") || moving;
-        // [[Patch]]
-        // Fix a bug that some rows are not moving, so
-        // I force-set their top based on the previous one.
         if (moving && parseInt(row.style.top, 10) < cachedPreOneTop) {
             set(
                 row,
@@ -152,7 +161,7 @@ function resize() {
     const scrollbar = quickInputListNode.querySelector(".scrollbar.vertical");
     if (scrollbar) {
         zoom(scrollbar, "height", "cachedHeight");
-        slider = scrollbar.querySelector(".slider");
+        const slider = scrollbar.querySelector(".slider");
         zoom(slider, "height", "cachedHeight");
         zoom(slider, "top", "cachedTop");
     }
@@ -172,7 +181,7 @@ const observer = new MutationObserver((mutationsList) => {
                 menuExist = true;
                 resize();
                 const maxHeightObserver = new MutationObserver(
-                    mutationsList => resize()
+                    () => resize()
                 );
                 maxHeightObserver.observe(quickInputListNode, {
                     attributes: true,
